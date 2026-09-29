@@ -47,6 +47,9 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user sources here
     ${CMAKE_CURRENT_SOURCE_DIR}/Libraries/TinyFrame/TinyFrame.c
     ${CMAKE_CURRENT_SOURCE_DIR}/Libraries/TinyFrame_Port/TF_Integration.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/App/led/led_task.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/App/comm/comm.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/App/app.c
 )
 
 # Add include paths
@@ -54,6 +57,8 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user defined include paths
     ${CMAKE_CURRENT_SOURCE_DIR}/Libraries/TinyFrame
     ${CMAKE_CURRENT_SOURCE_DIR}/Libraries/TinyFrame_Port
+    ${CMAKE_CURRENT_SOURCE_DIR}/App/comm
+    ${CMAKE_CURRENT_SOURCE_DIR}/App
 )
 
 # Add project symbols (macros)
