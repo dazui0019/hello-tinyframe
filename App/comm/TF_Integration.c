@@ -1,5 +1,6 @@
 #include "TinyFrame.h"
 #include "usart.h"
+#include "comm.h"
 
 /**
  * This is an example of integrating TinyFrame into the application.
@@ -25,14 +26,24 @@ void TF_WriteImpl(TinyFrame *tf, const uint8_t *buff, uint32_t len)
 /** Claim the TX interface before composing and sending a frame */
 bool TF_ClaimTx(TinyFrame *tf)
 {
-    // take mutex
-    return true; // we succeeded
+    (void)tf;
+
+    if(mutex_comm_tx == NULL){
+        return false;
+    }
+    return osMutexAcquire(mutex_comm_tx, osWaitForever) == osOK;
 }
 
 /** Free the TX interface after composing and sending a frame */
 void TF_ReleaseTx(TinyFrame *tf)
 {
-    // release mutex
+    (void)tf;
+
+    if (mutex_comm_tx == NULL) {
+        return;
+    }
+
+    (void)osMutexRelease(mutex_comm_tx);
 }
 
 // --------- Custom checksums ---------
