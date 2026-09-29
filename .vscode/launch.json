@@ -1,0 +1,20 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "STM32: Debug (pyOCD)",
+            "type": "cortex-debug",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "executable": "${workspaceFolder}/build/Debug/hello_tinyframe.elf",
+            "servertype": "pyocd",
+            "overrideGDBServerStartedRegex": "GDB server (started|listening) (at|on) port",
+            "serverpath": "pyocd",
+            "targetId": "stm32f407zgtx",
+            "gdbPath": "arm-none-eabi-gdb",
+            "serverArgs": ["--frequency", "1000000", "--no-wait"],
+            "runToEntryPoint": "main",
+            "preLaunchTask": "CMake: Build Debug"
+        }
+    ]
+}
