@@ -49,6 +49,42 @@
             "dependsOrder": "sequence",
             "group": "build",
             "problemMatcher": ["$gcc"]
+        },
+        {
+            "label": "pyOCD: Flash Debug",
+            "type": "process",
+            "command": "pyocd",
+            "args": [
+                "flash",
+                "--target", "stm32f407zgtx",
+                "--frequency", "1000000",
+                "--no-wait",
+                "${workspaceFolder}/build/Debug/hello_tinyframe.elf"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "dependsOn": "CMake: Build Debug",
+            "dependsOrder": "sequence",
+            "problemMatcher": []
+        },
+        {
+            "label": "pyOCD: Flash Release",
+            "type": "process",
+            "command": "pyocd",
+            "args": [
+                "flash",
+                "--target", "stm32f407zgtx",
+                "--frequency", "1000000",
+                "--no-wait",
+                "${workspaceFolder}/build/Release/hello_tinyframe.elf"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "dependsOn": "CMake: Build Release",
+            "dependsOrder": "sequence",
+            "problemMatcher": []
         }
     ]
 }
