@@ -11,7 +11,7 @@ TF_Peer peer_bit = TF_MASTER;
 
 osThreadId_t comm_task_handle;
 const osThreadAttr_t comm_task_attr = {
-  .name = "defaultTask",
+  .name = "commTask",
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityNormal,
 };
