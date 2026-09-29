@@ -1,0 +1,7 @@
+MDK-ARM/*
+!MDK-ARM/startup_stm32f407xx.s
+!MDK-ARM/hello_tinyframe.uvprojx
+
+.codex
+
+build/*
