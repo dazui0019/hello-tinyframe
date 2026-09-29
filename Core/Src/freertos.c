@@ -25,7 +25,10 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "string.h"
 #include "gpio.h"
+#include "usart.h"
+#include "TinyFrame.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -45,12 +48,20 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN Variables */
-
+TinyFrame tf;
+TF_Peer peer_bit = TF_MASTER;
 /* USER CODE END Variables */
 /* Definitions for defaultTask */
 osThreadId_t defaultTaskHandle;
 const osThreadAttr_t defaultTask_attributes = {
   .name = "defaultTask",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityNormal,
+};
+/* Definitions for tinyFrameTask */
+osThreadId_t tinyFrameTaskHandle;
+const osThreadAttr_t tinyFrameTask_attributes = {
+  .name = "tinyFrameTask",
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityNormal,
 };
@@ -61,6 +72,7 @@ const osThreadAttr_t defaultTask_attributes = {
 /* USER CODE END FunctionPrototypes */
 
 void StartDefaultTask(void *argument);
+void StartTinyFrameTask(void *argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -94,6 +106,9 @@ void MX_FREERTOS_Init(void) {
   /* creation of defaultTask */
   defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
 
+  /* creation of tinyFrameTask */
+  tinyFrameTaskHandle = osThreadNew(StartTinyFrameTask, NULL, &tinyFrameTask_attributes);
+
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
   /* USER CODE END RTOS_THREADS */
@@ -121,6 +136,25 @@ void StartDefaultTask(void *argument)
     osDelay(500);
   }
   /* USER CODE END StartDefaultTask */
+}
+
+/* USER CODE BEGIN Header_StartTinyFrameTask */
+/**
+* @brief Function implementing the tinyFrameTask thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartTinyFrameTask */
+void StartTinyFrameTask(void *argument)
+{
+  /* USER CODE BEGIN StartTinyFrameTask */
+  TF_InitStatic(&tf, peer_bit);
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1000);
+  }
+  /* USER CODE END StartTinyFrameTask */
 }
 
 /* Private application code --------------------------------------------------*/

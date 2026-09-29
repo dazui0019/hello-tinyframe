@@ -1,0 +1,3 @@
+[submodule "Libraries/TinyFrame"]
+	path = Libraries/TinyFrame
+	url = git@github.com:MightyPork/TinyFrame.git
