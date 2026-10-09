@@ -5,3 +5,8 @@ MDK-ARM/*
 .codex
 
 build/*
+
+# Python environments and bytecode
+.venv/
+__pycache__/
+*.py[cod]

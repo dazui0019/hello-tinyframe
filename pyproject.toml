@@ -1,0 +1,11 @@
+[project]
+name = "hello-tinyframe-tools"
+version = "0.1.0"
+description = "Python tools for testing the hello_tinyframe firmware"
+requires-python = ">=3.11"
+dependencies = [
+    "pyserial>=3.5,<4",
+]
+
+[tool.uv]
+package = false
