@@ -12,9 +12,15 @@
             "serverpath": "pyocd",
             "targetId": "stm32f407zgtx",
             "gdbPath": "arm-none-eabi-gdb",
-            "serverArgs": ["--frequency", "1000000", "--no-wait"],
+            "serverArgs": ["--frequency", "10000000", "--no-wait"],
             "runToEntryPoint": "main",
-            "preLaunchTask": "CMake: Build Debug"
+            "liveWatch": {
+                "enabled": true,
+                "samplesPerSecond": 1
+            },
+            "overrideResetCommands": ["monitor reset halt"],
+            "overrideRestartCommands": ["monitor reset halt"],
+            "preLaunchTask": "Debug: Prepare GDB"
         }
     ]
 }

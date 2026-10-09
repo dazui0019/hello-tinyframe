@@ -2,6 +2,18 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "Debug: Prepare GDB",
+            "type": "process",
+            "command": "arm-none-eabi-gdb",
+            "args": ["--batch", "--nx", "--quiet", "-ex", "show version"],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "dependsOn": "CMake: Build Debug",
+            "dependsOrder": "sequence",
+            "problemMatcher": []
+        },
+        {
             "label": "CMake: Configure Debug",
             "type": "process",
             "command": "cmake",
@@ -57,7 +69,7 @@
             "args": [
                 "flash",
                 "--target", "stm32f407zgtx",
-                "--frequency", "1000000",
+                "--frequency", "10000000",
                 "--no-wait",
                 "${workspaceFolder}/build/Debug/hello_tinyframe.elf"
             ],
@@ -75,7 +87,7 @@
             "args": [
                 "flash",
                 "--target", "stm32f407zgtx",
-                "--frequency", "1000000",
+                "--frequency", "100000",
                 "--no-wait",
                 "${workspaceFolder}/build/Release/hello_tinyframe.elf"
             ],
