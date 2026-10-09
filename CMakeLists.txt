@@ -37,6 +37,9 @@ add_executable(${CMAKE_PROJECT_NAME})
 # Add STM32CubeMX generated sources
 add_subdirectory(cmake/stm32cubemx)
 
+# Add lightweight ring buffer library
+add_subdirectory(Libraries/lwrb)
+
 # Link directories setup
 target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user defined library search paths
@@ -49,6 +52,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/App/led/led_task.c
     ${CMAKE_CURRENT_SOURCE_DIR}/App/comm/TF_Integration.c
     ${CMAKE_CURRENT_SOURCE_DIR}/App/comm/comm.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/App/comm/comm_port.c
     ${CMAKE_CURRENT_SOURCE_DIR}/App/app.c
 )
 
@@ -72,6 +76,7 @@ list(REMOVE_ITEM CMAKE_C_IMPLICIT_LINK_LIBRARIES ob)
 # Add linked libraries
 target_link_libraries(${CMAKE_PROJECT_NAME}
     stm32cubemx
+    lwrb
 
     # Add user defined libraries
 )

@@ -28,10 +28,10 @@ bool TF_ClaimTx(TinyFrame *tf)
 {
     (void)tf;
 
-    if(mutex_comm_tx == NULL){
+    if(tfTxMutex == NULL){
         return false;
     }
-    return osMutexAcquire(mutex_comm_tx, osWaitForever) == osOK;
+    return osMutexAcquire(tfTxMutex, osWaitForever) == osOK;
 }
 
 /** Free the TX interface after composing and sending a frame */
@@ -39,11 +39,11 @@ void TF_ReleaseTx(TinyFrame *tf)
 {
     (void)tf;
 
-    if (mutex_comm_tx == NULL) {
+    if (tfTxMutex == NULL) {
         return;
     }
 
-    (void)osMutexRelease(mutex_comm_tx);
+    (void)osMutexRelease(tfTxMutex);
 }
 
 // --------- Custom checksums ---------

@@ -1,49 +1,86 @@
 #include "comm.h"
 #include "main.h"
 #include "cmsis_os.h"
-#include "usart.h"
-#include "gpio.h"
 #include "TinyFrame.h"
+#include "comm_port.h"
+#include "lwrb/lwrb.h"
 
-static void comm_task(void *argument);
+static TinyFrame tf;
 
-TinyFrame tf;
-TF_Peer peer_bit = TF_MASTER;
-
-osThreadId_t comm_task_handle;
-const osThreadAttr_t comm_task_attr = {
-  .name = "commTask",
+static osThreadId_t tfRcvTaskHandle;
+const osThreadAttr_t tfRcvTask_attributes = {
+  .name = "tfRcvTask",
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityNormal,
 };
 
-osMutexId_t mutex_comm_tx;
-const osMutexAttr_t tx_mutex_attr = {
-    .name = "txMutex",
+osMutexId_t tfTxMutex;
+const osMutexAttr_t tfTxMutex_attributes = {
+    .name = "tfTxMutex",
     .attr_bits = osMutexPrioInherit,
     .cb_mem = NULL,
     .cb_size = 0
 };
 
-bool comm_init(void)
+static osSemaphoreId_t uartRxSemaphore;
+
+static uint8_t rbReadBuffer[UART_RX_BUFFER_SIZE];
+
+static uint8_t lwrbBuffer[RING_BUFFER_SIZE] = {0};
+static lwrb_t rx_rb;
+
+static void tfRcvTask(void *argument)
 {
-    if (!TF_InitStatic(&tf, TF_MASTER)) {
-        return false;
+    (void)argument;
+
+    for (;;)
+    {
+        if (osSemaphoreAcquire(uartRxSemaphore, osWaitForever) != osOK)
+        {
+            continue;
+        }
+
+        size_t count = 0;
+        for (;;)
+        {
+            count = lwrb_read(&rx_rb, rbReadBuffer, sizeof(rbReadBuffer));
+            if (count == 0)
+            {
+                break;
+            }
+            TF_Accept(&tf, rbReadBuffer, count);
+        }
     }
-
-    mutex_comm_tx = osMutexNew(&tx_mutex_attr);
-    if(mutex_comm_tx == NULL){
-        return false;
-    }
-
-    comm_task_handle = osThreadNew(comm_task, NULL, &comm_task_attr);
-
-    return comm_task_handle != NULL;
 }
 
-static void comm_task(void *argument)
+bool comm_init(void)
 {
-    for (;;) {
-        osDelay(100);
+    lwrb_init(&rx_rb, lwrbBuffer, sizeof(lwrbBuffer));
+
+    uartRxSemaphore = osSemaphoreNew(1U, 0U, NULL);
+
+    if (uartRxSemaphore == NULL)
+    {
+        return false;
     }
+    tfTxMutex = osMutexNew(&tfTxMutex_attributes);
+    if (tfTxMutex == NULL)
+    {
+        return false;
+    }
+
+    if (!TF_InitStatic(&tf, TF_MASTER))
+    {
+        return false;
+    }
+
+    comm_port_init(&rx_rb, uartRxSemaphore);
+
+    tfRcvTaskHandle = osThreadNew(tfRcvTask, NULL, &tfRcvTask_attributes);
+    if (tfRcvTaskHandle == NULL)
+    {
+        return false;
+    }
+
+    return true;
 }
