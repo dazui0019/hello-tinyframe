@@ -50,9 +50,11 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user sources here
     ${CMAKE_CURRENT_SOURCE_DIR}/Libraries/TinyFrame/TinyFrame.c
     ${CMAKE_CURRENT_SOURCE_DIR}/App/led/led_task.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/App/led/led.c
     ${CMAKE_CURRENT_SOURCE_DIR}/App/comm/TF_Integration.c
     ${CMAKE_CURRENT_SOURCE_DIR}/App/comm/comm.c
     ${CMAKE_CURRENT_SOURCE_DIR}/App/comm/comm_port.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/App/comm/tf_listener.c
     ${CMAKE_CURRENT_SOURCE_DIR}/App/app.c
 )
 

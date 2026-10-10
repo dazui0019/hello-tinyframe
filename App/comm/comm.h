@@ -4,8 +4,6 @@
 #include "stdbool.h"
 #include <cmsis_os.h>
 
-#define COMM_TYPE_STATUS 0x10
-
 typedef struct {
   uint8_t* buffer;
   uint8_t len;

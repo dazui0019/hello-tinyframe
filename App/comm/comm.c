@@ -4,6 +4,7 @@
 #include "TinyFrame.h"
 #include "comm_port.h"
 #include "lwrb/lwrb.h"
+#include "tf_listener.h"
 
 static TinyFrame tf;
 
@@ -73,6 +74,7 @@ bool comm_init(void)
     {
         return false;
     }
+    listener_register(&tf);
 
     comm_port_init(&rx_rb, uartRxSemaphore);
 
